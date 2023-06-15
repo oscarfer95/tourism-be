@@ -2,36 +2,42 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   CreateAttractionDto,
   UpdateAttractionDto,
-} from 'src/dtos/attractions.dtos';
-import { Attraction } from 'src/entities/attraction.entity';
+} from 'src/attractions/dtos/attractions.dtos';
+import { Attraction } from 'src/attractions/entities/attraction.entity';
 
 @Injectable()
 export class AttractionsService {
+
+  constructor() {
+  }
+
   private attractions: Attraction[] = [
     {
       id: '1',
       name: 'Torre Eiffel',
       description:
         'La Torre Eiffel es una emblemática estructura de hierro situada en París. Es uno de los monumentos más reconocidos en el mundo y un importante atractivo turístico de la ciudad.',
-      image: 'https://example.com/images/torre-eiffel.jpg',
+      coverUrl: 'https://example.com/images/torre-eiffel.jpg',
       rating: 4.5,
-    },
-    {
-      id: '2',
-      name: 'Torre Eiffel',
-      description:
-        'La Torre Eiffel es una emblemática estructura de hierro situada en París. Es uno de los monumentos más reconocidos en el mundo y un importante atractivo turístico de la ciudad.',
-      image: 'https://example.com/images/torre-eiffel.jpg',
-      rating: 4.5,
-    },
-    {
-      id: '3',
-      name: 'Torre Eiffel',
-      description:
-        'La Torre Eiffel es una emblemática estructura de hierro situada en París. Es uno de los monumentos más reconocidos en el mundo y un importante atractivo turístico de la ciudad.',
-      image: 'https://example.com/images/torre-eiffel.jpg',
-      rating: 4.5,
-    },
+      mainCategories: [],
+      categories: [],
+      foods: [],
+      isFeatured: true,
+      available: true,
+      location: {
+        address: '',
+        coords: {
+          lat: '',
+          lng: ''
+        }
+      },
+      contact: {
+        link: '',
+        mail: '',
+        phone: ''
+      },
+      order: 10
+    }
   ];
 
   findAll(limit?: number, offset?: number) {

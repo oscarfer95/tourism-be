@@ -8,13 +8,13 @@ import {
   Body,
   Post,
   HttpStatus,
-  HttpCode,
+  HttpCode
 } from '@nestjs/common';
 import {
   CreateAttractionDto,
   UpdateAttractionDto,
-} from 'src/dtos/attractions.dtos';
-import { AttractionsService } from 'src/services/attractions.service';
+} from 'src/attractions/dtos/attractions.dtos';
+import { AttractionsService } from 'src/attractions/services/attractions.service';
 
 @Controller('attractions')
 export class AttractionsController {
@@ -22,8 +22,9 @@ export class AttractionsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  getAttractions(@Query('limit') limit = 100, @Query('offset') offset = 0) {
+  getAttractions(@Query('limit') limit, @Query('offset') offset) {
     const list = this._attractionService.findAll(limit, offset);
+    
     return {
       message: 'Attraction list',
       payload: list,
