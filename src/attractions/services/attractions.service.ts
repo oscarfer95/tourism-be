@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   CreateAttractionDto,
   UpdateAttractionDto,
-} from 'src/attractions/dtos/attractions.dtos';
+} from 'src/attractions/dtos/attractions.dto';
 import { Attraction } from 'src/attractions/entities/attraction.entity';
 
 @Injectable()
@@ -37,6 +37,32 @@ export class AttractionsService {
         phone: ''
       },
       order: 10
+    },
+    {
+      id: '2',
+      name: 'Torre Eiffel 2',
+      description:
+        'La Torre Eiffel es una emblemática estructura de hierro situada en París. Es uno de los monumentos más reconocidos en el mundo y un importante atractivo turístico de la ciudad.',
+      coverUrl: 'https://example.com/images/torre-eiffel.jpg',
+      rating: 4.5,
+      mainCategories: [],
+      categories: [],
+      foods: [],
+      isFeatured: true,
+      available: true,
+      location: {
+        address: '',
+        coords: {
+          lat: '',
+          lng: ''
+        }
+      },
+      contact: {
+        link: '',
+        mail: '',
+        phone: ''
+      },
+      order: 20
     }
   ];
 
@@ -45,7 +71,7 @@ export class AttractionsService {
       return this.attractions.slice(offset, offset + limit);
     } else if (limit) {
       return this.attractions.slice(0, limit);
-    }
+    };
     return this.attractions;
   }
 
