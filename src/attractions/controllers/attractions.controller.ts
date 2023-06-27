@@ -25,9 +25,8 @@ export class AttractionsController {
   @Get()
   @ApiOperation({ summary: 'List of attractions' })
   @HttpCode(HttpStatus.OK)
-  getAttractions(@Query('limit') limit: any, @Query('offset') offset: any) {
-    const list = this._attractionService.findAll(limit, offset);
-    
+  async getAttractions(@Query('limit') limit: any, @Query('offset') offset: any) {
+    const list = await this._attractionService.findAll(limit, offset);
     return {
       message: 'Attraction list',
       payload: list,
@@ -37,8 +36,8 @@ export class AttractionsController {
   @Get(':id')
   @ApiOperation({ summary: 'Get attraction by id' })
   @HttpCode(HttpStatus.OK)
-  getAttraction(@Param('id') id: string) {
-    const attraction = this._attractionService.findOne(id);
+ async getAttraction(@Param('id') id: string) {
+    const attraction = await this._attractionService.findOne(id);
     return {
       message: 'Attraction founded',
       payload: attraction,
