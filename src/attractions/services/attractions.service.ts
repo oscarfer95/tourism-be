@@ -10,27 +10,45 @@ import { Db, ObjectId } from 'mongodb';
 export class AttractionsService {
 
   private collection: any;
-  private attractions: any;
+  private list: Attraction[];
+  public filter = {
+    available: true
+  };
+  public sortOptions = {
+    order: 1
+  };
 
   constructor(@Inject('MONGO') private _database: Db) {
     this.collection = this._database.collection('attractions');
-    console.log(this.collection.find().toArray());
   }
 
-  async findAll(limit?: number, offset?: number) {
-   this.attractions = await this.collection.find().toArray();
-    if (limit && offset && this.attractions) {
-      return this.attractions.slice(offset, offset + limit);
+  async findAll(limit?: number, offset?: number): Promise<Attraction[]> {
+   this.list = await this.collection.find(this.filter).sort(this.sortOptions).toArray();
+    if (limit && offset && this.list) {
+      return this.list.slice(offset, offset + limit);
     } else if (limit) {
-      return this.attractions.slice(0, limit);
+      return this.list.slice(0, limit);
     };
-    return this.attractions;
+    return this.list;
   }
 
-  async findOne(id: string) {
+  async findByCategory(value: any, limit?: number, offset?: number): Promise<Attraction[]> {
+    const attributeFilter = {
+      categories: { $in: value }
+    };
+    this.list = await this.collection.find(attributeFilter).sort(this.sortOptions).toArray();
+     if (limit && offset && this.list) {
+       return this.list.slice(offset, offset + limit);
+     } else if (limit) {
+       return this.list.slice(0, limit);
+     };
+     return this.list;
+   }
+
+  async findOne(id: string): Promise<Attraction> {
     const attraction = await this.collection.findOne({ _id: new ObjectId(id) });
     if (!attraction) {
-      throw new NotFoundException('Attraction not found');
+      throw new NotFoundException('Document not found');
     }
     return attraction;
   }
@@ -44,30 +62,32 @@ export class AttractionsService {
       await this.collection.insertOne(newAttraction);
       return newAttraction;
     } catch (error) {
-      throw new NotFoundException('Attraction not created');
+      throw new NotFoundException('Document not created');
     }
   }
 
-  update(id: string, payload: UpdateAttractionDto) {
-    const attraction = this.findOne(id);
-    if (!attraction) {
-      throw new NotFoundException('Attraction not found');
+  async update(id: string, payload: UpdateAttractionDto) {
+    let result = null;
+    const filter = { _id: new ObjectId(id) };
+    const update = {
+      $set: payload
+    };
+    try {
+      result = await this.collection.updateOne(filter, update);
+    } catch (error) {
+      throw new NotFoundException('Error updating document');
     }
-    const index = this.attractions.findIndex(
-      (attraction) => attraction.id === id,
-    );
-    this.attractions[index] = { ...attraction, ...payload };
-    return this.attractions[index];
+    return result;
   }
 
-  delete(id: string) {
-    const index = this.attractions.findIndex(
-      (attraction: Attraction) => attraction.id === id,
-    );
-    if (index === -1) {
-      throw new NotFoundException('Attraction not found');
+  async delete(id: string) {
+    let result = null;
+    const filter = { _id: new ObjectId(id) };
+    try {
+      result = await this.collection.deleteOne(filter);
+    } catch (error) {
+      throw new NotFoundException('Error deleting document');
     }
-    this.attractions.splice(index, 1);
-    return true;
+    return result;
   }
 }

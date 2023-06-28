@@ -8,7 +8,7 @@ import {
   Body,
   Post,
   HttpStatus,
-  HttpCode
+  HttpCode,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
@@ -25,7 +25,10 @@ export class AttractionsController {
   @Get()
   @ApiOperation({ summary: 'List of attractions' })
   @HttpCode(HttpStatus.OK)
-  async getAttractions(@Query('limit') limit: any, @Query('offset') offset: any) {
+  async getAttractions(
+    @Query('limit') limit: any,
+    @Query('offset') offset: any,
+  ) {
     const list = await this._attractionService.findAll(limit, offset);
     return {
       message: 'Attraction list',
@@ -33,10 +36,29 @@ export class AttractionsController {
     };
   }
 
+  @Get('category')
+  @ApiOperation({ summary: 'List of attractions by category' })
+  @HttpCode(HttpStatus.OK)
+  async getAttractionsByCategory(
+    @Body() categories: any,
+    @Query('limit') limit: any,
+    @Query('offset') offset: any,
+  ) {
+    const list = await this._attractionService.findByCategory(
+      categories.data,
+      limit,
+      offset,
+    );
+    return {
+      message: 'Attraction list by category',
+      payload: list,
+    };
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get attraction by id' })
   @HttpCode(HttpStatus.OK)
- async getAttraction(@Param('id') id: string) {
+  async getAttraction(@Param('id') id: string) {
     const attraction = await this._attractionService.findOne(id);
     return {
       message: 'Attraction founded',
