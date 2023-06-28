@@ -28,9 +28,6 @@ export class CreateAttractionDto {
   readonly coverUrl: string;
 
   @IsArray()
-  readonly mainCategories: string[];
-
-  @IsArray()
   @ApiProperty({description: 'Attraction string array categories ids'})
   readonly categories: string[];
 

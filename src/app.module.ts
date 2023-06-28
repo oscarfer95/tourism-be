@@ -1,4 +1,4 @@
-import * as Joi  from 'joi';
+import * as Joi from 'joi';
 
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
@@ -8,21 +8,23 @@ import { ConfigModule } from '@nestjs/config';
 import { environments } from 'enviroments';
 import config from './config';
 import { DatabaseModule } from './database.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
     AttractionsModule,
+    CategoriesModule,
     DatabaseModule,
     ConfigModule.forRoot({
-    envFilePath: environments[process.env.NODE_ENV] || '.env',
-    isGlobal: true,
-    load: [config],
-    validationSchema: Joi.object({
-      port: Joi.string().required(),
-      feUrl: Joi.string().required(),
-      corsOrigins: Joi.string().required()
-    })
-  })],
+      envFilePath: environments[process.env.NODE_ENV] || '.env',
+      isGlobal: true,
+      load: [config],
+      validationSchema: Joi.object({
+        port: Joi.string().required(),
+        feUrl: Joi.string().required(),
+        corsOrigins: Joi.string().required()
+      })
+    })],
   controllers: [AppController],
   providers: [
     AppService

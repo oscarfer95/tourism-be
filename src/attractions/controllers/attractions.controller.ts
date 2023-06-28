@@ -36,7 +36,18 @@ export class AttractionsController {
     };
   }
 
-  @Get('category')
+  @Get()
+  @ApiOperation({ summary: 'List of featured attractions' })
+  @HttpCode(HttpStatus.OK)
+  async getFeaturedAttractions() {
+    const list = await this._attractionService.findAllFeatured();
+    return {
+      message: 'Attraction featured list',
+      payload: list,
+    };
+  }
+
+  @Post('category')
   @ApiOperation({ summary: 'List of attractions by category' })
   @HttpCode(HttpStatus.OK)
   async getAttractionsByCategory(

@@ -2,7 +2,6 @@ import { Contact } from "./contact.entity";
 import { Location } from "./location.entity";
 
 export class Attraction {
-  id: string;
   name: string;
   description: string;
   coverUrl: string;

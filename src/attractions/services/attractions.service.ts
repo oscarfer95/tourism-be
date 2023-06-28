@@ -10,7 +10,6 @@ import { Db, ObjectId } from 'mongodb';
 export class AttractionsService {
 
   private collection: any;
-  private list: Attraction[];
   public filter = {
     available: true
   };
@@ -23,44 +22,62 @@ export class AttractionsService {
   }
 
   async findAll(limit?: number, offset?: number): Promise<Attraction[]> {
-   this.list = await this.collection.find(this.filter).sort(this.sortOptions).toArray();
-    if (limit && offset && this.list) {
-      return this.list.slice(offset, offset + limit);
+    const list = await this.collection.find(this.filter).sort(this.sortOptions).toArray();
+    if (limit && offset && list) {
+      return list.slice(offset, offset + limit);
     } else if (limit) {
-      return this.list.slice(0, limit);
+      return list.slice(0, limit);
     };
-    return this.list;
+    return list;
+  }
+
+  async findAllFeatured(): Promise<Attraction[]> {
+    const featuredFilter = {
+      available: true,
+      isFeatured: true
+    };
+
+    const list = await this.collection.find(featuredFilter).sort(this.sortOptions).toArray();
+    return list;
   }
 
   async findByCategory(value: any, limit?: number, offset?: number): Promise<Attraction[]> {
-    const attributeFilter = {
-      categories: { $in: value }
-    };
-    this.list = await this.collection.find(attributeFilter).sort(this.sortOptions).toArray();
-     if (limit && offset && this.list) {
-       return this.list.slice(offset, offset + limit);
-     } else if (limit) {
-       return this.list.slice(0, limit);
-     };
-     return this.list;
+    let list = [];
+
+    if (value) {
+      const attributeFilter = {
+        categories: { $in: value }
+      };
+
+      list = await this.collection.find(attributeFilter).sort(this.sortOptions).toArray();
+      if (limit && offset && list) {
+        return list.slice(offset, offset + limit);
+      } else if (limit) {
+        return list.slice(0, limit);
+      };
+    } else {
+      list = await this.findAll();
+    }
+
+     return list;
    }
 
   async findOne(id: string): Promise<Attraction> {
-    const attraction = await this.collection.findOne({ _id: new ObjectId(id) });
-    if (!attraction) {
+    const item = await this.collection.findOne({ _id: new ObjectId(id) });
+    if (!item) {
       throw new NotFoundException('Document not found');
     }
-    return attraction;
+    return item;
   }
 
   async create(payload: CreateAttractionDto) {
-    const newAttraction = {
+    const newDocument = {
       ...payload
     };
 
     try {
-      await this.collection.insertOne(newAttraction);
-      return newAttraction;
+      await this.collection.insertOne(newDocument);
+      return newDocument;
     } catch (error) {
       throw new NotFoundException('Document not created');
     }
