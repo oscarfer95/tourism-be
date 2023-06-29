@@ -17,7 +17,7 @@ import {
 } from 'src/attractions/dtos/attractions.dto';
 import { AttractionsService } from 'src/attractions/services/attractions.service';
 
-@ApiTags('attractions')
+@ApiTags('Attractions')
 @Controller('attractions')
 export class AttractionsController {
   constructor(private _attractionService: AttractionsService) {}
@@ -70,10 +70,10 @@ export class AttractionsController {
   @ApiOperation({ summary: 'Get attraction by id' })
   @HttpCode(HttpStatus.OK)
   async getAttraction(@Param('id') id: string) {
-    const attraction = await this._attractionService.findOne(id);
+    const document = await this._attractionService.findOne(id);
     return {
       message: 'Attraction founded',
-      payload: attraction,
+      payload: document,
     };
   }
 
@@ -81,10 +81,10 @@ export class AttractionsController {
   @ApiOperation({ summary: 'Create new attraction' })
   @HttpCode(HttpStatus.CREATED)
   createAttraction(@Body() payload: CreateAttractionDto) {
-    const newAttraction = this._attractionService.create(payload);
+    const newDocument = this._attractionService.create(payload);
     return {
       message: 'Attraction created',
-      payload: newAttraction,
+      payload: newDocument,
     };
   }
 

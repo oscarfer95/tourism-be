@@ -6,14 +6,16 @@ import { AppService } from './app.service'
 import { AttractionsModule } from './attractions/attractions.module';
 import { ConfigModule } from '@nestjs/config';
 import { environments } from 'enviroments';
-import config from './config';
 import { DatabaseModule } from './database.module';
 import { CategoriesModule } from './categories/categories.module';
+import { RestaurantsModule } from './restaurants/restaurants.module';
+import config from './config';
 
 @Module({
   imports: [
     AttractionsModule,
     CategoriesModule,
+    RestaurantsModule,
     DatabaseModule,
     ConfigModule.forRoot({
       envFilePath: environments[process.env.NODE_ENV] || '.env',

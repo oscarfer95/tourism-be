@@ -14,7 +14,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from '../services/category.service';
 import { CreateCategoryDto, UpdateCategoryDto } from '../dtos/category.dto';
 
-@ApiTags('categories')
+@ApiTags('Categories')
 @Controller('categories')
 export class CategoryController {
   constructor(private _categoryService: CategoryService) {}
@@ -49,10 +49,10 @@ export class CategoryController {
   @ApiOperation({ summary: 'Get category by id' })
   @HttpCode(HttpStatus.OK)
   async getCategory(@Param('id') id: string) {
-    const category = await this._categoryService.findOne(id);
+    const document = await this._categoryService.findOne(id);
     return {
       message: 'Category founded',
-      payload: category,
+      payload: document,
     };
   }
 
@@ -60,10 +60,10 @@ export class CategoryController {
   @ApiOperation({ summary: 'Create new category' })
   @HttpCode(HttpStatus.CREATED)
   createCategory(@Body() payload: CreateCategoryDto) {
-    const newCategory = this._categoryService.create(payload);
+    const newDocument = this._categoryService.create(payload);
     return {
       message: 'Category created',
-      payload: newCategory,
+      payload: newDocument,
     };
   }
 
