@@ -5,7 +5,6 @@ export class Attraction {
   name: string;
   description: string;
   coverUrl: string;
-  mainCategories: string[];
   categories: string[];
   foods: string[];
   isFeatured: boolean;

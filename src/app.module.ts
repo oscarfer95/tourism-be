@@ -9,13 +9,15 @@ import { environments } from 'enviroments';
 import { DatabaseModule } from './database.module';
 import { CategoriesModule } from './categories/categories.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
+import { FoodsModule } from './foods/foods.module';
 import config from './config';
 
 @Module({
   imports: [
     AttractionsModule,
-    CategoriesModule,
     RestaurantsModule,
+    FoodsModule,
+    CategoriesModule,
     DatabaseModule,
     ConfigModule.forRoot({
       envFilePath: environments[process.env.NODE_ENV] || '.env',
