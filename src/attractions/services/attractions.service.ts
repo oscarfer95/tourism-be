@@ -60,7 +60,7 @@ export class AttractionsService {
     }
 
      return list;
-   }
+  }
 
   async findOne(id: string): Promise<Attraction> {
     const item = await this.collection.findOne({ _id: new ObjectId(id) });

@@ -17,7 +17,7 @@ import { CreateRestaurantDto, UpdateRestaurantDto } from '../dtos/restaurants.dt
 @ApiTags('Restaurants')
 @Controller('restaurants')
 export class RestaurantController {
-  constructor(private _restaurantService: RestaurantsService) {}
+  constructor(private _restaurantService: RestaurantsService) { }
 
   @Get()
   @ApiOperation({ summary: 'List of restaurants' })
@@ -40,6 +40,21 @@ export class RestaurantController {
     const list = await this._restaurantService.findAllFeatured();
     return {
       message: 'Restaurant featured list',
+      payload: list,
+    };
+  }
+
+  @Post('food')
+  @ApiOperation({ summary: 'List of restaurants by food' })
+  @HttpCode(HttpStatus.OK)
+  async getRestaurantsByFood(
+    @Body() foods: any
+  ) {
+    const list = await this._restaurantService.findByFood(
+      foods.data
+    );
+    return {
+      message: 'Restaurant list by category',
       payload: list,
     };
   }

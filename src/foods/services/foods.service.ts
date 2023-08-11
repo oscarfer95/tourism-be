@@ -30,25 +30,32 @@ export class FoodsService {
     return list;
   }
 
-  async findAllFeatured(): Promise<Food[]> {
-    const featuredFilter = {
-      available: true,
-      isFeatured: true,
-    };
-
-    const list = await this.collection
-      .find(featuredFilter)
-      .sort(this.sortOptions)
-      .toArray();
-    return list;
-  }
-
   async findOne(id: string): Promise<Food> {
     const item = await this.collection.findOne({ _id: new ObjectId(id) });
     if (!item) {
       throw new NotFoundException('Document not found');
     }
     return item;
+  }
+
+  async findByIds(value: any): Promise<Food[]> {
+    let list = [];
+
+    try {
+      if (value) {
+        let ids = value.map((id: any) => new ObjectId(id));
+  
+        const attributeFilter = {
+          _id: { $in: ids }
+        };
+        
+        list = await this.collection.find(attributeFilter).sort(this.sortOptions).toArray();
+      }
+    } catch (error) {
+      console.log(error);
+      list = [];
+  }
+    return list;
   }
 
   async create(payload: CreateFoodDto) {

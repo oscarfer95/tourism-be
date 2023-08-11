@@ -1,18 +1,23 @@
 import { Global, Module } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 import { MongoClient } from 'mongodb';
+import config from './config';
 
 @Global()
 @Module({
-  providers:[
-    {    
+  providers: [
+    {
       provide: 'MONGO',
-      useFactory: async () => {
-        const uri = 'mongodb://root:root@localhost:27017/?authMechanism=DEFAULT';
+      useFactory: async (confirService: ConfigType<typeof config>) => {
+        const { connection, user, password, host, port, dbName } = confirService.mongo;
+        const uri =
+          `${connection}://${user}:${password}@${host}:${port}/?authMechanism=DEFAULT`;
         const client = new MongoClient(uri);
         await client.connect();
-        const database = client.db('turismo-GAMC');
+        const database = client.db(dbName);
         return database;
-      }
+      },
+      inject: [config.KEY]
     }
   ], exports: ['MONGO']
 })

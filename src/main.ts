@@ -11,8 +11,8 @@ async function bootstrap() {
   }));
 
   const config = new DocumentBuilder()
-  .setTitle('TourismBE')
-  .setDescription('GAMC Tourism API')
+  .setTitle('VisitaCochaBE')
+  .setDescription('GAMC Visita Cocha API')
   .setVersion('1.0')
   .build();
   const document = SwaggerModule.createDocument(app, config);

@@ -33,17 +33,6 @@ export class FoodsController {
     };
   }
 
-  @Get()
-  @ApiOperation({ summary: 'List of featured foods' })
-  @HttpCode(HttpStatus.OK)
-  async getFeaturedFoods() {
-    const list = await this._foodService.findAllFeatured();
-    return {
-      message: 'Food featured list',
-      payload: list,
-    };
-  }
-
   @Get(':id')
   @ApiOperation({ summary: 'Get restaurant by id' })
   @HttpCode(HttpStatus.OK)
@@ -52,6 +41,19 @@ export class FoodsController {
     return {
       message: 'Food founded',
       payload: document,
+    };
+  }
+
+  @Post('filterId')
+  @ApiOperation({ summary: 'List of food by id array' })
+  @HttpCode(HttpStatus.OK)
+  async listFoodByIds(@Body() payload: any) {
+    const list = await this._foodService.findByIds(payload.data);
+    console.log(list);
+    
+    return {
+      message: 'List of food',
+      payload: list,
     };
   }
 

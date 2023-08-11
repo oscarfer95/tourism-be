@@ -5,6 +5,14 @@ export default registerAs('config', () => {
     corsOrigins: process.env.corsOrigins,
     port: process.env.port,
     feUrl: process.env.feUrl,
-    env: process.env.NODE_ENV
+    env: process.env.NODE_ENV,
+    mongo: {
+      dbName: process.env.MONGO_DB,
+      user: process.env.MONGO_INITDB_ROOT_USERNAME,
+      password: process.env.MONGO_INITDB_ROOT_PASSWORD,
+      port: parseInt(process.env.MONGO_PORT, 10),
+      host: process.env.MONGO_HOST,
+      connection: process.env.MONGO_CONNECTION,
+    }
   };
 });

@@ -74,6 +74,25 @@ export class RestaurantsService {
     return list;
   }
 
+  async findByFood(
+    value: any
+  ): Promise<Restaurant[]> {
+    let list = [];
+
+    if (value) {
+      const attributeFilter = {
+        foods: { $in: value },
+      };
+
+      list = await this.collection
+        .find(attributeFilter)
+        .sort(this.sortOptions)
+        .toArray();
+    }
+
+    return list;
+  }
+
   async findOne(id: string): Promise<Restaurant> {
     const item = await this.collection.findOne({ _id: new ObjectId(id) });
     if (!item) {
