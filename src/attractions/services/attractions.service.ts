@@ -5,6 +5,8 @@ import {
 } from 'src/attractions/dtos/attractions.dto';
 import { Attraction } from 'src/attractions/entities/attraction.entity';
 import { Db, ObjectId } from 'mongodb';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose'
 
 @Injectable()
 export class AttractionsService {
@@ -13,21 +15,46 @@ export class AttractionsService {
   public filter = {
     available: true
   };
-  public sortOptions = {
+  public sortOptions: any = {
     order: 1
   };
 
-  constructor(@Inject('MONGO') private _database: Db) {
+  constructor(@Inject('MONGO') private _database: Db,
+              @InjectModel(Attraction.name) private _attractionModel: Model<Attraction>) {
     this.collection = this._database.collection('attractions');
+
   }
 
+  // async findAll(limit?: number, offset?: number): Promise<Attraction[]> {
+  //   const filter = { available: true }; // Tu filtro
+  //   const sortOptions = { order: 1 }; // Tus opciones de clasificación
+
+  //   let query = this._attractionModel.findAll(filter);
+
+  //   if (limit !== undefined && offset !== undefined) {
+  //     query = query.skip(offset).limit(limit);
+  //   } else if (limit !== undefined) {
+  //     query = query.limit(limit);
+  //   }
+
+  //   const list = await query.exec();
+  //   return list;
+  // }
+
   async findAll(limit?: number, offset?: number): Promise<Attraction[]> {
-    const list = await this.collection.find(this.filter).sort(this.sortOptions).toArray();
-    if (limit && offset && list) {
-      return list.slice(offset, offset + limit);
-    } else if (limit) {
-      return list.slice(0, limit);
-    };
+    // const list = await this.collection.find(this.filter).sort(this.sortOptions).toArray();
+    // const list = await this._attractionModel.find(this.filter).exec();
+    let list: any = await this._attractionModel.find().exec();
+    console.log(list);
+    
+
+    // if (limit && offset) {
+    //   query = query.skip(offset).limit(limit);
+    // } else if (limit) {
+    //   query = query.limit(limit);
+    // }
+
+    // const list = await query.exec();
     return list;
   }
 
