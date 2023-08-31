@@ -64,7 +64,7 @@ export class CreateAttractionDto {
   @IsNumber()
   @IsNotEmpty()
   @IsPositive()
-  @ApiProperty({description: 'Attraction rating 1 -5'})
+  @ApiProperty({description: 'Attraction rating 1 - 5'})
   readonly rating: number;
 }
 
